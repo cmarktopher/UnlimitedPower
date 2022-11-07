@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class PROJECTCLICHE_API AProjectClicheGameModeBase : public AGameModeBase
+class AProjectClicheGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
