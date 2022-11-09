@@ -15,8 +15,19 @@ public:
 	AEnemy();
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Behaviour")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour")
 	class UBehaviorTree* DefaultBehaviourTree;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour")
+	bool bPatrolViaSplinePoints;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour")
+	AActor* SplinePatrolActor;;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AI | Behaviour" )
+	AActor* GetSplinePatrolActor() const;
+
+protected:
 	virtual void BeginPlay() override;
 };
