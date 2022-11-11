@@ -10,6 +10,9 @@ UCLASS(Abstract)
 class AEnemy : public ACharacter
 {
 	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
+	class UHealthComponent* HealthComponent;
 	
 public:
 	AEnemy();

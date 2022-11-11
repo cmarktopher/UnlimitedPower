@@ -1,0 +1,50 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+#include "BoostComponent.generated.h"
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCurrentBoostModified, float, CurrentBoost, float, MaxBoost);
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class UBoostComponent : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Boost System")
+	FOnCurrentBoostModified OnCurrentBoostIncreased;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Boost System")
+	float DefaultMaxBoost = 100;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boost System")
+	float BoostFactor = 1.2;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Boost System")
+	float MaxBoost = 100;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Boost System")
+	float CurrentBoost = 0;
+
+public:	
+	UBoostComponent();
+	
+protected:
+	virtual void BeginPlay() override;
+	
+public:
+	/** Get the current and max health */
+	UFUNCTION(BlueprintCallable, Category = "Boost System")
+	void GetBoostValues(float& CurrentBoostValue, float& MaxBoostValue) const;
+	
+	/** 
+	 * Increase current boost value
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Boost System")
+	void IncreaseBoost(const float Amount);
+};

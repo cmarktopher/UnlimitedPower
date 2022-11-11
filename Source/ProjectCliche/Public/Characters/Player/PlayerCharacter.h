@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/Combat/Damageable.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class APlayerCharacter : public ACharacter
+class APlayerCharacter : public ACharacter, public IDamageable
 {
 	GENERATED_BODY()
 
@@ -21,6 +22,12 @@ class APlayerCharacter : public ACharacter
 	/** Actor component for player to act as a source stimuli for the perception system.*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionStimuliSourceComponent* PerceptionStimuliSourceComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
+	class UHealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
+	class UBoostComponent* BoostComponent;
 	
 public:
 	APlayerCharacter();
@@ -47,4 +54,6 @@ protected:
 	/** Allow right/left movement */
 	UFUNCTION(BlueprintCallable,Category = "Character | Movement")
 	void MoveRightLeft(float AxisValue);
+
+	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;
 };
