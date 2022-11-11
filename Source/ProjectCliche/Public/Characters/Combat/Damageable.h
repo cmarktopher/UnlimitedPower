@@ -24,4 +24,7 @@ class IDamageable
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Combat System")
 	void DoDamage(AActor* DamagingActor, float Damage);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Combat System")
+	void PerformPushback(AActor* DamagingActor, FVector PushbackVelocity);
 };
