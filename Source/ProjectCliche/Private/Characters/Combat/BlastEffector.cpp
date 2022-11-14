@@ -14,12 +14,14 @@ void ABlastEffector::UseBlast_Implementation()
 	// Blank for now, decided to do the sphere trace in blueprints.
 }
 
-void ABlastEffector::HandleBlast(AActor* HitActor, FVector ImpactPoint)
+void ABlastEffector::HandleBlast(const FHitResult& HitResult)
 {
+	AActor* HitActor = HitResult.GetActor();
+	
 	const float DistanceRatio = FVector::Distance(GetActorLocation(), HitActor->GetActorLocation()) / BlastDistance;
 	const FVector Direction = UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(), HitActor->GetActorLocation());
 
-	// Do damage and perform knock back
+	// Do damage and perform knock back on enemies
 	if (HitActor->GetClass()->ImplementsInterface(UDamageable::StaticClass()))
 	{
 		// Handle interpolating damage based on distance factor

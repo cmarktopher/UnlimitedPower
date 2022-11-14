@@ -5,10 +5,14 @@
 #include "CoreMinimal.h"
 #include "Characters/Combat/Damageable.h"
 #include "GameFramework/Character.h"
+#include "Levels/Triggers/InstructionTriggerReceiver.h"
 #include "PlayerCharacter.generated.h"
 
+// Events
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstructionTriggerActivated, FText, InstructionText);
+
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class APlayerCharacter : public ACharacter, public IDamageable
+class APlayerCharacter : public ACharacter, public IDamageable, public IInstructionTriggerReceiver
 {
 	GENERATED_BODY()
 
@@ -28,11 +32,21 @@ class APlayerCharacter : public ACharacter, public IDamageable
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	class UBoostComponent* BoostComponent;
+
+public:
+	/** Events */
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnInstructionTriggerActivated OnInstructionTriggerActivated;
+	
+private:
+	float OriginalJumpValue;
 	
 public:
 	APlayerCharacter();
 
 protected:
+	virtual void BeginPlay() override;
+	
 	/**
 	 * Allow the camera to rotate around the Z-Axis (Yaw)
 	 * @note The turn rate will be based on values set on a custom blueprint Player Controller.
@@ -55,5 +69,14 @@ protected:
 	UFUNCTION(BlueprintCallable,Category = "Character | Movement")
 	void MoveRightLeft(float AxisValue);
 
+	/** Custom-ish jump method which will handle the amount of extra jump applied based on the boost factor. */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void JumpWithBoost(float BoostAmount);
+
+	/** Response event when the movement mode changes. */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void OnMovementModeChangedResponse(ACharacter* Character, EMovementMode PrevMovementMode, uint8 PreviousCustomMode);
+	
 	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;
+	virtual void NotifyInstructionActivationEvent_Implementation(const FText& InstructionsText) override;
 };

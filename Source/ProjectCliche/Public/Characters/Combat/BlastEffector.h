@@ -40,7 +40,7 @@ public:
 
 	/** Handles the core blast logic outside of the sphere cast */
 	UFUNCTION(BlueprintCallable, Category = "Blast Effector")
-	void HandleBlast(AActor* HitActor, FVector ImpactPoint);
+	void HandleBlast(const FHitResult& HitResult);
 	
 	/** Get the start and end locations for the trace.*/
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Blast Effector")
