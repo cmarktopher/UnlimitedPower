@@ -36,11 +36,11 @@ public:
 	 * For the moment, I am doing the spherecast in blueprint, so this method will need to be overridden and have logic constructed using the methods in this class and within blueprints.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Blast Effector")
-	void UseBlast();
+	void UseBlast(const float ExtraBoostAmount);
 
 	/** Handles the core blast logic outside of the sphere cast */
 	UFUNCTION(BlueprintCallable, Category = "Blast Effector")
-	void HandleBlast(const FHitResult& HitResult);
+	void HandleBlast(const FHitResult& HitResult, const float ExtraBoostAmount);
 	
 	/** Get the start and end locations for the trace.*/
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Blast Effector")

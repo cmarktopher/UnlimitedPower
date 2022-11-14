@@ -9,12 +9,12 @@ ABlastEffector::ABlastEffector()
 	
 }
 
-void ABlastEffector::UseBlast_Implementation()
+void ABlastEffector::UseBlast_Implementation(const float ExtraBoostAmount)
 {
 	// Blank for now, decided to do the sphere trace in blueprints.
 }
 
-void ABlastEffector::HandleBlast(const FHitResult& HitResult)
+void ABlastEffector::HandleBlast(const FHitResult& HitResult,  const float ExtraBoostAmount)
 {
 	AActor* HitActor = HitResult.GetActor();
 	
@@ -25,7 +25,7 @@ void ABlastEffector::HandleBlast(const FHitResult& HitResult)
 	if (HitActor->GetClass()->ImplementsInterface(UDamageable::StaticClass()))
 	{
 		// Handle interpolating damage based on distance factor
-		const float Damage = UKismetMathLibrary::Lerp(BlastDamage, 0, DistanceRatio);
+		const float Damage = (UKismetMathLibrary::Lerp(BlastDamage, 0, DistanceRatio)) + ExtraBoostAmount;
 		
 		IDamageable::Execute_DoDamage(HitActor, this, Damage);
 
