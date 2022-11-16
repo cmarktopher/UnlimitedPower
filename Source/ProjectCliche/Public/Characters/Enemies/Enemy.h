@@ -4,21 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Characters/Combat/Damageable.h"
+#include "Characters/Combat/Attacker.h"
+#include "Characters/Combat/PerceptionTag.h"
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
 UCLASS(Abstract)
-class AEnemy : public ACharacter, public IDamageable
+class AEnemy : public ACharacter,
+public IDamageable, public IAttacker,  public IPerceptionTag
 {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	class UHealthComponent* HealthComponent;
 	
-public:
-	AEnemy();
-
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
+	FName AIPerceptionTag;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour")
 	class UBehaviorTree* DefaultBehaviourTree;
 
@@ -27,11 +30,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour")
 	AActor* SplinePatrolActor;;
-
+	
 public:
+	AEnemy();
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AI | Behaviour" )
 	AActor* GetSplinePatrolActor() const;
-
+	
 protected:
 	virtual void BeginPlay() override;
+
+	virtual FName GetAIPerceptionTag_Implementation() override;
 };

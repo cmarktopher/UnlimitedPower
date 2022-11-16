@@ -2,10 +2,28 @@
 
 #include "Characters/Enemies/Enemy.h"
 #include "Characters/Combat/HealthComponent.h"
+#include "Characters/Controllers/EnemyAIController.h"
 
 AEnemy::AEnemy()
 {
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
+}
+
+void AEnemy::BeginPlay()
+{
+	// If we have a behaviour tree assigned, we can assume that we want to run the tree.
+	if (DefaultBehaviourTree)
+	{
+		AEnemyAIController* AIController =  static_cast<AEnemyAIController*>(GetController());
+		AIController->RunBehaviorTree(DefaultBehaviourTree);
+	}
+	
+	Super::BeginPlay();
+}
+
+FName AEnemy::GetAIPerceptionTag_Implementation()
+{
+	return AIPerceptionTag;
 }
 
 AActor* AEnemy::GetSplinePatrolActor() const
@@ -17,9 +35,3 @@ AActor* AEnemy::GetSplinePatrolActor() const
 
 	return nullptr;
 }
-
-void AEnemy::BeginPlay()
-{
-	Super::BeginPlay();
-}
-

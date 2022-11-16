@@ -113,6 +113,11 @@ void APlayerCharacter::NotifyInstructionActivationEvent_Implementation(const FTe
 	OnInstructionTriggerActivated.Broadcast(InstructionsText);
 }
 
+FName APlayerCharacter::GetAIPerceptionTag_Implementation()
+{
+	return AIPerceptionTag;
+}
+
 
 
 

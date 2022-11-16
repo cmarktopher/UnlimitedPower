@@ -10,7 +10,7 @@ UCLASS(Abstract)
 class ABlastEffector : public AActor
 {
 	GENERATED_BODY()
-
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
 	float BlastDamage;

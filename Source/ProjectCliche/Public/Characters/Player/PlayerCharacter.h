@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/Combat/Damageable.h"
+#include "Characters/Combat/PerceptionTag.h"
 #include "GameFramework/Character.h"
 #include "Levels/Triggers/InstructionTriggerReceiver.h"
 #include "PlayerCharacter.generated.h"
@@ -12,18 +13,19 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstructionTriggerActivated, FText, InstructionText);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class APlayerCharacter : public ACharacter, public IDamageable, public IInstructionTriggerReceiver
+class APlayerCharacter : public ACharacter,
+public IDamageable, public IInstructionTriggerReceiver, public IPerceptionTag
 {
 	GENERATED_BODY()
 
-	/** Scene component for the camera and camera boom */
+	/** Scene components. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Scene Components", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoomComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Scene Components", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* ThirdPersonCameraComponent;
 	
-	/** Actor component for player to act as a source stimuli for the perception system.*/
+	/** Actor components. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionStimuliSourceComponent* PerceptionStimuliSourceComponent;
 
@@ -32,11 +34,15 @@ class APlayerCharacter : public ACharacter, public IDamageable, public IInstruct
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	class UBoostComponent* BoostComponent;
-
+	
 public:
 	/** Events */
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnInstructionTriggerActivated OnInstructionTriggerActivated;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
+	FName AIPerceptionTag;
 	
 private:
 	float OriginalJumpValue;
@@ -76,7 +82,9 @@ protected:
 	/** Response event when the movement mode changes. */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
 	void OnMovementModeChangedResponse(ACharacter* Character, EMovementMode PrevMovementMode, uint8 PreviousCustomMode);
-	
+
+	/** Interface implementations */
 	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;
 	virtual void NotifyInstructionActivationEvent_Implementation(const FText& InstructionsText) override;
+	virtual FName GetAIPerceptionTag_Implementation() override;
 };

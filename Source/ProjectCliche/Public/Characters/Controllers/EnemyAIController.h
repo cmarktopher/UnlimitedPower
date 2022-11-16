@@ -17,7 +17,7 @@ class AEnemyAIController : public AAIController
 
 public:
 	AEnemyAIController();
-
+	
 protected:
 	virtual void BeginPlay() override;
 	
