@@ -26,9 +26,6 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::BeginPlay()
 {
-	// Set some defaults
-	OriginalJumpValue = GetCharacterMovement()->JumpZVelocity;
-	
 	// Bind events
 	MovementModeChangedDelegate.AddDynamic(this, &APlayerCharacter::OnMovementModeChangedResponse);
 	
@@ -64,24 +61,30 @@ void APlayerCharacter::MoveRightLeft(const float AxisValue)
 	
 }
 
-void APlayerCharacter::JumpWithBoost(const float BoostAmount)
+void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount)
 {
-	// Set the jump amount - we will need to reset the jump amount back to the original amount once character lands.
-	GetCharacterMovement()->JumpZVelocity += BoostAmount;
+	// Do the initial jump
+	if (CurrentJumpCount == 0)
+	{
+		Jump();
+	}
+	else if (CurrentJumpCount < MaxJumpCount)
+	{
+		// To handle the subsequent jump, we will use launch character.
+		LaunchCharacter(GetActorUpVector() * BoostAmount, false, false);
+	}
 
-	// Jump
-	Jump();
+	CurrentJumpCount++;
 }
 
 void APlayerCharacter::OnMovementModeChangedResponse(ACharacter* Character, EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
-	switch (PrevMovementMode)
+	switch (GetCharacterMovement()->MovementMode)
 	{
 		case MOVE_None:
 			break;
 		case MOVE_Walking:
-			// For jumping logic, we want to reset the jump z value back to the original value.
-			GetCharacterMovement()->JumpZVelocity = OriginalJumpValue;
+			CurrentJumpCount = 0;
 			break;
 		case MOVE_NavWalking:
 			break;

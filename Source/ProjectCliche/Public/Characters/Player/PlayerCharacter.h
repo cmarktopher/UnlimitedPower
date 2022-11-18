@@ -43,9 +43,13 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
 	FName AIPerceptionTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Jumping")
+	int32 MaxJumpCount;
 	
 private:
-	float OriginalJumpValue;
+	bool bIsInFirstJump = false;
+	int32 CurrentJumpCount;
 	
 public:
 	APlayerCharacter();
@@ -75,9 +79,9 @@ protected:
 	UFUNCTION(BlueprintCallable,Category = "Character | Movement")
 	void MoveRightLeft(float AxisValue);
 
-	/** Custom-ish jump method which will handle the amount of extra jump applied based on the boost factor. */
+	/** A custom-ish jump method that will have logic for double jumping */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
-	void JumpWithBoost(float BoostAmount);
+	void JumpWithDoubleJump(const float BoostAmount);
 
 	/** Response event when the movement mode changes. */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
