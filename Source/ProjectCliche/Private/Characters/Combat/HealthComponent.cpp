@@ -22,7 +22,7 @@ void UHealthComponent::GetHealthValues(float& CurrentHealthValue, float& MaxHeal
 	MaxHealthValue = MaxHealth;
 }
 
-void UHealthComponent::ReduceCurrentHealth(float Amount)
+void UHealthComponent::ReduceCurrentHealth(const float Amount)
 {
 	CurrentHealth -= Amount;
 
@@ -32,9 +32,14 @@ void UHealthComponent::ReduceCurrentHealth(float Amount)
 	}
 
 	OnCurrentHealthDecreased.Broadcast(CurrentHealth, MaxHealth);
+
+	if (bDestroyOnHealthZero && CurrentHealth == 0)
+	{
+		GetWorld()->DestroyActor(GetOwner());
+	}
 }
 
-void UHealthComponent::IncreaseCurrentHealth(float Amount)
+void UHealthComponent::IncreaseCurrentHealth(const float Amount)
 {
 	CurrentHealth += Amount;
 

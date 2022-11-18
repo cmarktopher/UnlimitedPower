@@ -29,6 +29,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health System")
 	float CurrentHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health System")
+	bool bDestroyOnHealthZero = true;
 	
 public:	
 	UHealthComponent();
