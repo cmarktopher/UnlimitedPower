@@ -71,7 +71,13 @@ void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount)
 	else if (CurrentJumpCount < MaxJumpCount)
 	{
 		// To handle the subsequent jump, we will use launch character.
-		LaunchCharacter(GetActorUpVector() * BoostAmount, false, false);
+		// However, since this is intended to be propelled from the ground, we need to check if we have ground directly under us.
+		// I'll use a trace to handle this in blueprints which will override the following method.
+		if (CheckIfGroundUnderPlayer())
+		{
+			LaunchCharacter(GetActorUpVector() * (BaseDoubleJumpAmount + BoostAmount), false, false);
+		}
+		
 	}
 
 	CurrentJumpCount++;

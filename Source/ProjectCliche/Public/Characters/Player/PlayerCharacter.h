@@ -44,8 +44,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
 	FName AIPerceptionTag;
 
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Jumping")
-	int32 MaxJumpCount;
+	float BaseDoubleJumpAmount = 100;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Jumping")
+	int32 MaxJumpCount = 2;
 	
 private:
 	bool bIsInFirstJump = false;
@@ -87,6 +91,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
 	void OnMovementModeChangedResponse(ACharacter* Character, EMovementMode PrevMovementMode, uint8 PreviousCustomMode);
 
+	/** A custom-ish jump method that will have logic for double jumping */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character | Movement")
+	bool CheckIfGroundUnderPlayer();
+	
 	/** Interface implementations */
 	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;
 	virtual void NotifyInstructionActivationEvent_Implementation(const FText& InstructionsText) override;
