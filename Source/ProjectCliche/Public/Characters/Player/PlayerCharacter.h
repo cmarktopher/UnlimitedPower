@@ -94,6 +94,14 @@ protected:
 	/** A custom-ish jump method that will have logic for double jumping */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character | Movement")
 	bool CheckIfGroundUnderPlayer();
+
+	/**
+	 * Response to when health reaches zero
+	 * By default, the character will be destroyed but can be overriden in blueprints for some extra logic (death animation etc...)
+	 * TODO This is also repeated in the enemy class - will look into making a general character parent class for this type of logic after the game jam.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Character | Health")
+	void HandleHealthZeroResponse();
 	
 	/** Interface implementations */
 	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;

@@ -33,9 +33,9 @@ void UHealthComponent::ReduceCurrentHealth(const float Amount)
 
 	OnCurrentHealthDecreased.Broadcast(CurrentHealth, MaxHealth);
 
-	if (bDestroyOnHealthZero && CurrentHealth == 0)
+	if (CurrentHealth == 0)
 	{
-		GetWorld()->DestroyActor(GetOwner());
+		OnHealthZero.Broadcast();
 	}
 }
 

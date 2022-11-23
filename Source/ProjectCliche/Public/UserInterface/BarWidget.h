@@ -22,7 +22,7 @@ class UBarWidget : public UUserWidget
 	FTimerHandle ProgressBarInterpolationTimeHandler;
 	float TargetProgressValue;
 	float CurrentProgressValue;
-	
+
 protected:
 	virtual void NativeConstruct() override;
 

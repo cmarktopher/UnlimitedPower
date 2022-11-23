@@ -28,6 +28,7 @@ void APlayerCharacter::BeginPlay()
 {
 	// Bind events
 	MovementModeChangedDelegate.AddDynamic(this, &APlayerCharacter::OnMovementModeChangedResponse);
+	HealthComponent->OnHealthZero.AddDynamic(this, &APlayerCharacter::HandleHealthZeroResponse);
 	
 	Super::BeginPlay();
 }
@@ -107,6 +108,11 @@ void APlayerCharacter::OnMovementModeChangedResponse(ACharacter* Character, EMov
 		default: ;
 		
 	}
+}
+
+void APlayerCharacter::HandleHealthZeroResponse_Implementation()
+{
+	Destroy();
 }
 
 void APlayerCharacter::DoDamage_Implementation(AActor* DamagingActor, const float Damage)

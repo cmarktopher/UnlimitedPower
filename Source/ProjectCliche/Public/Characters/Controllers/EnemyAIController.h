@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Perception/AIPerceptionTypes.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -21,6 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	UFUNCTION(BlueprintCallable, Category = "AI Controller | Behaviour")
-	void ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, UPARAM(ref) const FAIStimulus& Stimuli, const FName& BlackboardKey);
+	//UFUNCTION(BlueprintCallable, Category = "AI Controller | Behaviour")
+	//void ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, UPARAM(ref) const FAIStimulus& Stimuli, const FName& BlackboardKey);
 };

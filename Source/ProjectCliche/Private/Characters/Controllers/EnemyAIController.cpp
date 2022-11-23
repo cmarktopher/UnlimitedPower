@@ -2,11 +2,7 @@
 
 
 #include "Characters/Controllers/EnemyAIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/Enemies/Enemy.h"
-#include "Perception/AIPerceptionComponent.h"
-#include "Perception/AISenseConfig.h"
-
 
 AEnemyAIController::AEnemyAIController()
 {
@@ -18,6 +14,7 @@ void AEnemyAIController::BeginPlay()
 	Super::BeginPlay();
 }
 
+/**
 void AEnemyAIController::ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, const FAIStimulus& Stimuli, const FName& BlackboardKey)
 {
 	// TODO Does not distinguish between different perception stimuli at the moment, will update if game needs extra stimuli (also, I have no idea how to get the stimuli types at the moment)
@@ -39,3 +36,4 @@ void AEnemyAIController::ProcessSightPerceptionStimuli(AActor* ActorProducingSti
 		Blackboard->SetValueAsObject(BlackboardKey, nullptr);
 	}
 }
+*/

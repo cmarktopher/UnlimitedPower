@@ -7,6 +7,7 @@
 #include "HealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCurrentHealthModified, float, CurrentHealth, float, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthZero);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UHealthComponent : public UActorComponent
@@ -19,6 +20,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Health System")
 	FOnCurrentHealthModified OnCurrentHealthDecreased;
+
+	UPROPERTY(BlueprintAssignable, Category = "Health System")
+	FOnHealthZero OnHealthZero;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health System")
@@ -29,9 +33,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health System")
 	float CurrentHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health System")
-	bool bDestroyOnHealthZero = true;
 	
 public:	
 	UHealthComponent();
