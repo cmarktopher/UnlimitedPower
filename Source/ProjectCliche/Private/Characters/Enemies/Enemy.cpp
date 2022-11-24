@@ -52,16 +52,22 @@ void AEnemy::ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, const 
 	{
 		const auto Blackboard = AIController->GetBlackboardComponent();
 		Blackboard->SetValueAsObject(BlackboardKey, ActorProducingStimuli);
+
+		// I've decided to make the health bar appear only when the enemy has sensed a target
+		HealthBarComponent->SetVisibility(true);
 	}
 	else
 	{
 		const auto Blackboard = AIController->GetBlackboardComponent();
 		Blackboard->SetValueAsObject(BlackboardKey, nullptr);
+		
+		HealthBarComponent->SetVisibility(false);
 	}
 }
 
 void AEnemy::HandleHealthZeroResponse_Implementation()
 {
+	OnEnemyDied.Broadcast(this);
 	Destroy();
 }
 

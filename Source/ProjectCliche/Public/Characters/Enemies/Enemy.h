@@ -10,7 +10,7 @@
 #include "Perception/AIPerceptionTypes.h"
 #include "Enemy.generated.h"
 
-struct FAIStimulus;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDied, class AEnemy*, Enemy);
 UCLASS(Abstract)
 class AEnemy : public ACharacter,
 public IDamageable, public IAttacker,  public IPerceptionTag
@@ -27,6 +27,10 @@ public IDamageable, public IAttacker,  public IPerceptionTag
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor Components", meta = (AllowPrivateAccess = "true"))
 	//UAIPerceptionComponent* AIPerceptionComponent;
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnEnemyDied OnEnemyDied;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
