@@ -60,6 +60,10 @@ protected:
 	/** Process perception stimuli caused by other actors (will be player only for now) */
 	UFUNCTION(BlueprintCallable, Category = "AI Controller | Behaviour")
 	void ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, UPARAM(ref) const FAIStimulus& Stimuli, const FName& BlackboardKey);
+
+	/** Handle logic when perception of target has been lost. */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AI Controller | Behaviour")
+	void HandlePerceptionLost(const FName& BlackboardKey);
 	
 	/**
 	 * Response to when health reaches zero

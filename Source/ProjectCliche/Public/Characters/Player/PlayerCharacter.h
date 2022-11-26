@@ -9,8 +9,20 @@
 #include "Levels/Triggers/InstructionTriggerReceiver.h"
 #include "PlayerCharacter.generated.h"
 
+/**
+ * States for the player
+ */
+UENUM(BlueprintType)
+enum EPlayerState
+{
+	Normal,
+	InCutscene
+};
+
+
 // Events
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstructionTriggerActivated, FText, InstructionText);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerStateSwitched, EPlayerState, PreviousState, EPlayerState, CurrentState);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class APlayerCharacter : public ACharacter,
@@ -40,16 +52,27 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnInstructionTriggerActivated OnInstructionTriggerActivated;
 
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnPlayerStateSwitched OnPlayerStateSwitched;
+
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player State")
+	TEnumAsByte<EPlayerState> CurrentPlayerState = EPlayerState::Normal;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
 	FName AIPerceptionTag;
-
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Jumping")
 	float BaseDoubleJumpAmount = 100;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Jumping")
 	int32 MaxJumpCount = 2;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat System")
+	class ABlastEffector* BlastWeapon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat System")
+	class ACannonEffector* CannonWeapon;
 	
 private:
 	bool bIsInFirstJump = false;
@@ -58,6 +81,17 @@ private:
 public:
 	APlayerCharacter();
 
+	/** Method used for state switching */
+	UFUNCTION(BlueprintCallable, Category = "Player State")
+	void SwitchPlayerState(TEnumAsByte<EPlayerState> NewState);
+
+	/**
+	 * Get the current jump count
+	 * TODO Seems like Unreal already has a mechanism to keep track of jump count. Will move to that system once the jam is over.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Character | Movement")
+	int32 GetJumpCount() const;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -91,7 +125,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
 	void OnMovementModeChangedResponse(ACharacter* Character, EMovementMode PrevMovementMode, uint8 PreviousCustomMode);
 
-	/** A custom-ish jump method that will have logic for double jumping */
+	/** Method to line trace to check if we are above a surface. This is implemented in blueprints for now. */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character | Movement")
 	bool CheckIfGroundUnderPlayer();
 

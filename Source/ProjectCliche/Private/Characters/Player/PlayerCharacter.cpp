@@ -24,6 +24,19 @@ APlayerCharacter::APlayerCharacter()
 	BoostComponent = CreateDefaultSubobject<UBoostComponent>(TEXT("Boost Component"));
 }
 
+void APlayerCharacter::SwitchPlayerState(const TEnumAsByte<EPlayerState> NewState)
+{
+	const TEnumAsByte<EPlayerState> PreviousPlayerState = CurrentPlayerState;
+	CurrentPlayerState = NewState;
+
+	OnPlayerStateSwitched.Broadcast(PreviousPlayerState, CurrentPlayerState);
+}
+
+int32 APlayerCharacter::GetJumpCount() const
+{
+	return CurrentJumpCount;
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	// Bind events
@@ -74,7 +87,7 @@ void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount)
 		// To handle the subsequent jump, we will use launch character.
 		// However, since this is intended to be propelled from the ground, we need to check if we have ground directly under us.
 		// I'll use a trace to handle this in blueprints which will override the following method.
-		if (CheckIfGroundUnderPlayer())
+		if (BlastWeapon && CheckIfGroundUnderPlayer())
 		{
 			LaunchCharacter(GetActorUpVector() * (BaseDoubleJumpAmount + BoostAmount), false, false);
 		}

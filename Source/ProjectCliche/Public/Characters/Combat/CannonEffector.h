@@ -13,7 +13,10 @@ class ACannonEffector : public AActor
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon Effector")
-	float CannonDamage;
+	float MinCannonDamage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon Effector")
+	float MaxCannonDamage;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cannon Effector")
 	float MinCannonRange = 100;
@@ -21,8 +24,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Cannon Effector")
 	float CurrentCannonRange;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon Effector")
+	float DamageDampener;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Cannon Effector")
 	FTimerHandle ChannelTimerHandler;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Cannon Effector")
+	class UBoostComponent* BoostComponentRef;
 	
 public:	
 	ACannonEffector();
@@ -33,9 +42,10 @@ protected:
 public:
 	/**
 	 * This will start the cannon logic.
+	 * TODO Due to the way I did this logic, I need to pass in the boost component to get the boost amount. I think I'll have to re-think the entire system in future implementations. 
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Cannon Effector")
-	void UseCannon(const float ExtraBoostAmount);
+	void UseCannon(UBoostComponent* BoostComponent);
 
 	/**
 	 * We essentially need to trace continuously for this to work. So, in blueprints, use cannon will start a timer handler and call this method.

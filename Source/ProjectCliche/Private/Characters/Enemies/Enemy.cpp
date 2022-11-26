@@ -58,11 +58,16 @@ void AEnemy::ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, const 
 	}
 	else
 	{
-		const auto Blackboard = AIController->GetBlackboardComponent();
-		Blackboard->SetValueAsObject(BlackboardKey, nullptr);
-		
-		HealthBarComponent->SetVisibility(false);
+		HandlePerceptionLost(BlackboardKey);
 	}
+}
+
+void AEnemy::HandlePerceptionLost_Implementation(const FName& BlackboardKey)
+{
+	const auto Blackboard = AIController->GetBlackboardComponent();
+	Blackboard->SetValueAsObject(BlackboardKey, nullptr);
+		
+	HealthBarComponent->SetVisibility(false);
 }
 
 void AEnemy::HandleHealthZeroResponse_Implementation()

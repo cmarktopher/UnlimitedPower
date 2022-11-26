@@ -14,8 +14,10 @@ void ACannonEffector::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ACannonEffector::UseCannon_Implementation(const float ExtraBoostAmount)
+void ACannonEffector::UseCannon_Implementation(UBoostComponent* BoostComponent)
 {
+	BoostComponentRef = BoostComponent;
+	
 	GetWorld()->GetTimerManager().SetTimer(
 		ChannelTimerHandler,
 		this,
