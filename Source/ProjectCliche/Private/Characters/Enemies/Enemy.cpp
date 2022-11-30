@@ -24,10 +24,9 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	// If we have a behaviour tree assigned, we can assume that we want to run the tree.
-	if (DefaultBehaviourTree)
+	if (bStartBehaviourOnSpawn && DefaultBehaviourTree)
 	{
-		AIController = static_cast<AEnemyAIController*>(GetController());
-		AIController->RunBehaviorTree(DefaultBehaviourTree);
+		StartBehaviour();
 	}
 
 	// Bind events
@@ -48,7 +47,8 @@ void AEnemy::ProcessSightPerceptionStimuli(AActor* ActorProducingStimuli, const 
 	}
 	
 	// This conditional handles logic for when we are within sight and when out of site - mostly just setting blackboard values and letting the behaviour tree handle the logic.
-	if (Stimuli.WasSuccessfullySensed())
+	// TODO Due to a bug with the perception system crashing the game if behaviour tree not set due to the way I initialized the behaviour logic, I am putting the AIController check as well to ensure we don't crash. A better way of doing this is needed.
+	if (AIController && Stimuli.WasSuccessfullySensed())
 	{
 		const auto Blackboard = AIController->GetBlackboardComponent();
 		Blackboard->SetValueAsObject(BlackboardKey, ActorProducingStimuli);
@@ -90,3 +90,10 @@ AActor* AEnemy::GetSplinePatrolActor() const
 
 	return nullptr;
 }
+
+void AEnemy::StartBehaviour_Implementation()
+{
+	AIController = static_cast<AEnemyAIController*>(GetController());
+	AIController->RunBehaviorTree(DefaultBehaviourTree);
+}
+

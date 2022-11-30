@@ -6,6 +6,7 @@
 #include "Characters/Combat/HealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -75,7 +76,7 @@ void APlayerCharacter::MoveRightLeft(const float AxisValue)
 	
 }
 
-void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount)
+void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount, USoundBase* JumpSound)
 {
 	// Do the initial jump
 	if (CurrentJumpCount == 0)
@@ -89,6 +90,7 @@ void APlayerCharacter::JumpWithDoubleJump(const float BoostAmount)
 		// I'll use a trace to handle this in blueprints which will override the following method.
 		if (BlastWeapon && CheckIfGroundUnderPlayer())
 		{
+		    UGameplayStatics::PlaySound2D(this, JumpSound, 1, 1, 0, nullptr, nullptr, false);
 			LaunchCharacter(GetActorUpVector() * (BaseDoubleJumpAmount + BoostAmount), false, false);
 		}
 		
@@ -139,6 +141,11 @@ void APlayerCharacter::DoDamage_Implementation(AActor* DamagingActor, const floa
 void APlayerCharacter::NotifyInstructionActivationEvent_Implementation(const FText& InstructionsText)
 {
 	OnInstructionTriggerActivated.Broadcast(InstructionsText);
+}
+
+void APlayerCharacter::ReceiveDialogue_Implementation(const int DialogueTextIdentifier)
+{
+	
 }
 
 FName APlayerCharacter::GetAIPerceptionTag_Implementation()

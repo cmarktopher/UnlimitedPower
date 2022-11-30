@@ -46,13 +46,19 @@ protected:
 	AActor* SplinePatrolActor;;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI | Behaviour")
-	class AEnemyAIController* AIController; 
+	class AEnemyAIController* AIController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI | Behaviour", meta = (ExposeOnSpawn))
+	bool bStartBehaviourOnSpawn = true;
 	
 public:
 	AEnemy();
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AI | Behaviour" )
 	AActor* GetSplinePatrolActor() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "AI | Behaviour")
+	void StartBehaviour();
 	
 protected:
 	virtual void BeginPlay() override;

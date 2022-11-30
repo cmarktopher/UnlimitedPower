@@ -6,6 +6,7 @@
 #include "Characters/Combat/Damageable.h"
 #include "Characters/Combat/PerceptionTag.h"
 #include "GameFramework/Character.h"
+#include "Levels/Triggers/DialogueTriggerReceiver.h"
 #include "Levels/Triggers/InstructionTriggerReceiver.h"
 #include "PlayerCharacter.generated.h"
 
@@ -26,7 +27,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerStateSwitched, EPlayerStat
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class APlayerCharacter : public ACharacter,
-public IDamageable, public IInstructionTriggerReceiver, public IPerceptionTag
+public IDamageable, public IInstructionTriggerReceiver, public IDialogueTriggerReceiver , public IPerceptionTag
 {
 	GENERATED_BODY()
 
@@ -56,7 +57,7 @@ public:
 	FOnPlayerStateSwitched OnPlayerStateSwitched;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player State")
 	TEnumAsByte<EPlayerState> CurrentPlayerState = EPlayerState::Normal;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI | Perception")
@@ -119,7 +120,7 @@ protected:
 
 	/** A custom-ish jump method that will have logic for double jumping */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
-	void JumpWithDoubleJump(const float BoostAmount);
+	void JumpWithDoubleJump(const float BoostAmount, USoundBase* JumpSound);
 
 	/** Response event when the movement mode changes. */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
@@ -140,5 +141,8 @@ protected:
 	/** Interface implementations */
 	virtual void DoDamage_Implementation(AActor* DamagingActor, float Damage) override;
 	virtual void NotifyInstructionActivationEvent_Implementation(const FText& InstructionsText) override;
+	virtual void ReceiveDialogue_Implementation(const int DialogueTextIdentifier) override;
 	virtual FName GetAIPerceptionTag_Implementation() override;
 };
+
+

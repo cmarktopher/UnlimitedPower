@@ -25,7 +25,7 @@ void ABlastEffector::HandleBlast(const FHitResult& HitResult,  const float Extra
 	if (HitActor->GetClass()->ImplementsInterface(UDamageable::StaticClass()))
 	{
 		// Handle interpolating damage based on distance factor
-		const float Damage = (UKismetMathLibrary::Lerp(BlastDamage, 0, DistanceRatio)) + ExtraBoostAmount;
+		const float Damage = (UKismetMathLibrary::Lerp(BlastDamage, 0, DistanceRatio)) + (ExtraBoostAmount * BoostDampenerMultiplier);
 		
 		IDamageable::Execute_DoDamage(HitActor, this, Damage);
 
@@ -41,6 +41,7 @@ void ABlastEffector::CalculateTraceStartAndEndPositions(FVector& Start, FVector&
 
 	End = Start + (GetActorForwardVector() * BlastDistance);
 }
+
 
 
 

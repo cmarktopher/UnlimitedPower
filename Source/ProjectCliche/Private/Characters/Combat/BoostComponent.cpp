@@ -33,6 +33,28 @@ void UBoostComponent::IncreaseBoost(const float Amount)
 	}
 	
 	OnCurrentBoostIncreased.Broadcast(CurrentBoost, MaxBoost);
+
+	// Since we want to decrease the boost amount over time, lets use a timer handler for that until it reaches 0.
+	GetWorld()->GetTimerManager().ClearTimer(BoostDecayTimerHandler);
+	
+	GetWorld()->GetTimerManager().SetTimer(
+		BoostDecayTimerHandler,
+		this,
+		&UBoostComponent::DecreaseBoostOverTime,
+		BoostDecayRate,
+		true);
 }
 
+
+void UBoostComponent::DecreaseBoostOverTime()
+{
+    //UE_LOG(LogTemp, Warning, TEXT("%f"), CurrentBoost)
+	CurrentBoost -= BoostDecayAmount;
+	
+	if (CurrentBoost <= 0)
+	{
+		OnBoostReachedZero.Broadcast();
+		GetWorld()->GetTimerManager().ClearTimer(BoostDecayTimerHandler);
+	}
+}
 

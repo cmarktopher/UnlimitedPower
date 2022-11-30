@@ -8,6 +8,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCurrentBoostModified, float, CurrentBoost, float, MaxBoost);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBoostReachedZero);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UBoostComponent : public UActorComponent
@@ -18,6 +19,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Boost System")
 	FOnCurrentBoostModified OnCurrentBoostIncreased;
 
+	UPROPERTY(BlueprintAssignable, Category = "Boost System")
+	FOnBoostReachedZero OnBoostReachedZero;
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Boost System")
 	float DefaultMaxBoost = 100;
@@ -31,6 +35,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Boost System")
 	float CurrentBoost = 0;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Boost System")
+	float BoostDecayAmount = 10;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Boost System")
+	float BoostDecayRate = 0.5;
+	
+private:
+	FTimerHandle BoostDecayTimerHandler;
+	
 public:	
 	UBoostComponent();
 	
@@ -47,4 +60,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Boost System")
 	void IncreaseBoost(const float Amount);
+
+	/** Decrease boost over time */
+	UFUNCTION(BlueprintCallable, Category = "Blast Effector")
+	void DecreaseBoostOverTime();
 };
+

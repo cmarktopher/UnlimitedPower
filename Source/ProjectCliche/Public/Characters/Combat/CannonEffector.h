@@ -17,6 +17,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon Effector")
 	float MaxCannonDamage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
+	float BoostDampenerMultiplier = 0.2;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cannon Effector")
 	float MinCannonRange = 100;

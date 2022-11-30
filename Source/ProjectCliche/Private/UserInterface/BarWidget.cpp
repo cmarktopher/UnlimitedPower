@@ -11,7 +11,7 @@ void UBarWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UBarWidget::UpdateProgressBar(const float CurrentValue, const float MaxValue)
+void UBarWidget::UpdateProgressBar_Implementation(const float CurrentValue, const float MaxValue)
 {
 	TargetProgressValue = CurrentValue / MaxValue;
 	

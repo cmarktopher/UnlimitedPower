@@ -16,6 +16,9 @@ protected:
 	float BlastDamage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
+	float BoostDampenerMultiplier = 0.2; // This will likely be changed to something else once I figure out a better way to balance the boost system.
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
 	float BlastDistance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
@@ -26,6 +29,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
 	float MinPushbackAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
+	bool bCanUse = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Blast Effector")
+	float Cooldown = 1;
 	
 public:	
 	ABlastEffector();

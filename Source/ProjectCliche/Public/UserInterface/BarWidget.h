@@ -24,10 +24,14 @@ class UBarWidget : public UUserWidget
 	float CurrentProgressValue;
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Progress Bar")
+	bool bModifyBarViaBinding;
+	
+protected:
 	virtual void NativeConstruct() override;
 
 	/** Update the progress bar. */
-	UFUNCTION(BlueprintCallable, Category = "Progress Bar")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Progress Bar")
 	void UpdateProgressBar(const float CurrentValue, const float MaxValue);
 
 private:
